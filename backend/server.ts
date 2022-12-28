@@ -1,6 +1,14 @@
 import * as express from 'express';
-import { errorHandler } from '../middleware/errorMiddleware';
+import { connectDB } from './database/db';
+import { errorHandler } from './middleware/errorMiddleware';
 import { PORT } from './utils/config';
+import * as Colors from 'colors.ts';
+
+//Apply Colors to consoleLogs
+Colors.colors('', '');
+
+//Connection to DB
+connectDB();
 
 const app = express();
 app.use(express.json());
