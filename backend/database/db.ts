@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { DB_URI } from "../utils/config";
+import HttpException from "../utils/httpException";
 
 export const connectDB = async () => {
   mongoose.set("strictQuery", false);
@@ -15,3 +16,9 @@ export const connectDB = async () => {
     process.exit(1);
   }
 };
+
+export function checkValidId(id: string) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new HttpException("Invalid ID", 400);
+  }
+}

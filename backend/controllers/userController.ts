@@ -1,79 +1,59 @@
 import { Request, Response } from "express";
 import expressAsyncHandler = require("express-async-handler");
-import UserModel from "../models/userModel";
-const mongoose = require("mongoose");
+import {
+  getUsers,
+  createUser,
+  getUser,
+  updateUser,
+  deleteUser,
+} from "../services/userServices";
+import mongoose = require("mongoose");
 
 //Get all Users
-export const getUsers = expressAsyncHandler(
+export const getUsersHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const users = await UserModel.find();
+    const users = await getUsers();
     res.status(200).json({ users });
   }
 );
 
 //Create new User
-export const createUser = expressAsyncHandler(
+export const createUserHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
     if (!req.body.name || !req.body.surname || !req.body.email) {
       res.status(400);
       throw new Error("All filed must be filled");
     }
 
-    const user = await UserModel.create(req.body);
-    if (!user) {
-      res.status(400);
-      throw new Error("User was not created");
-    }
-    res.status(200).json({ user });
+    const user = await createUser(req.body);
+    res.status(201).json(user);
   }
 );
 
 //Get single User
-export const getUser = expressAsyncHandler(
+export const getUserHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      res.status(400);
-      throw new Error("Invalid ID");
-    }
-    const user = await UserModel.findById(req.params.id);
-    if (!user) {
-      res.status(404);
-      throw new Error("User not found");
-    }
-    res.status(200).json({ user });
+    const user = await getUser(req.params.id);
+    res.status(200).json(user);
   }
 );
 
 //Update User
-export const updateUser = expressAsyncHandler(
+export const updateUserHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
     if (!req.body.name && !req.body.surname && !req.body.email) {
       res.status(400);
       throw new Error("Commit at least one change");
     }
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      res.status(400);
-      throw new Error("Invalid ID");
-    }
-    const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    res.status(200).json({ user });
+    const user = await updateUser(req.params.id, req.body);
+    res.status(200).json(user);
   }
 );
 
 //Delete User
-export const deleteUser = expressAsyncHandler(
+export const deleteUserHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      res.status(400);
-      throw new Error("Invalid ID");
-    }
-    const user = await UserModel.findByIdAndDelete(req.params.id);
-    if (!user) {
-      res.status(200);
-      throw new Error("user not found");
-    }
+    await deleteUser(req.params.id);
     res.status(200).json({ message: `Delete ${req.params.id}` });
   }
 );
