@@ -7,7 +7,6 @@ import {
   updateUser,
   deleteUser,
 } from "../services/userServices";
-import mongoose = require("mongoose");
 
 //Get all Users
 export const getUsersHandler = expressAsyncHandler(
@@ -20,11 +19,6 @@ export const getUsersHandler = expressAsyncHandler(
 //Create new User
 export const createUserHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    if (!req.body.name || !req.body.surname || !req.body.email) {
-      res.status(400);
-      throw new Error("All filed must be filled");
-    }
-
     const user = await createUser(req.body);
     res.status(201).json(user);
   }
@@ -41,10 +35,6 @@ export const getUserHandler = expressAsyncHandler(
 //Update User
 export const updateUserHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    if (!req.body.name && !req.body.surname && !req.body.email) {
-      res.status(400);
-      throw new Error("Commit at least one change");
-    }
     const user = await updateUser(req.params.id, req.body);
     res.status(200).json(user);
   }
@@ -54,6 +44,6 @@ export const updateUserHandler = expressAsyncHandler(
 export const deleteUserHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
     await deleteUser(req.params.id);
-    res.status(200).json({ message: `Delete ${req.params.id}` });
+    res.status(200).json({ message: `Deleted ${req.params.id}` });
   }
 );

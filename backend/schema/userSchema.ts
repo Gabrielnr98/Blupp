@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { UserType } from "../types/userModelTypes";
+import { UserType } from "../types/userTypes";
 
 export interface IUserSchema extends UserType {
   _id: string;

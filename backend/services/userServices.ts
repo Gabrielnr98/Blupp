@@ -1,7 +1,8 @@
 import { checkValidId } from "../database/db";
 import UserModel from "../models/userModel";
+import { sanitizeUser } from "../sanitizers/userSanitizer";
 import { IUserSchema } from "../schema/userSchema";
-import { UserType } from "../types/userModelTypes";
+import { UserType } from "../types/userTypes";
 
 export async function getUsers(): Promise<UserType[]> {
   try {
@@ -16,6 +17,7 @@ export async function getUsers(): Promise<UserType[]> {
 }
 
 export async function createUser(user: UserType): Promise<UserType> {
+  sanitizeUser(user);
   try {
     const newUser = await UserModel.create(user);
     if (!newUser) {
@@ -45,6 +47,7 @@ export async function updateUser(
   user: UserType
 ): Promise<IUserSchema> {
   checkValidId(id);
+  sanitizeUser(user);
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(id, user, {
       new: true,
