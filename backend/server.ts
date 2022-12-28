@@ -13,7 +13,7 @@ connectDB();
 const app = express();
 app.use(express.json());
 
-app.use("/api/user", require("./routes/userRoutes"));
+app.use("/api/user", require("./routes/gigRoutes"));
 
 app.use(errorHandler);
 

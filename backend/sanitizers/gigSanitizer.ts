@@ -1,13 +1,12 @@
-import { UserType } from "../types/userTypes";
+import { GigType } from "../types/gigTypes";
 import HttpException from "../utils/httpException";
 
-export function sanitizeUser(user: UserType): UserType {
-  let sanitizedUser = <UserType>{};
+export function sanitizeGig(gig: GigType): GigType {
+  let sanitizedGig = <GigType>{};
 
-  sanitizedUser.name = sanitizeName(user.name.toString());
-  sanitizedUser.surname = sanitizeName(user.surname.toString());
+  sanitizedGig.name = sanitizeName(gig.name.toString());
 
-  return sanitizedUser;
+  return sanitizedGig;
 }
 
 function sanitizeName(name: string): string {
