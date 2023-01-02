@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import { connectDB } from "./database/db";
 import { errorHandler } from "./middleware/errorMiddleware";
 import { PORT } from "./utils/config";
@@ -13,7 +13,8 @@ connectDB();
 const app = express();
 app.use(express.json());
 
-app.use("/api/user", require("./routes/gigRoutes"));
+app.use("/api/gig", require("./routes/gigRoutes"));
+app.use("/api/user", require("./routes/userRoutes"));
 
 app.use(errorHandler);
 

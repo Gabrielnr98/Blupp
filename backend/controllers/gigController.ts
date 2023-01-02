@@ -11,32 +11,32 @@ import {
 //Get all Users
 export const getAllGigsHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const users = await getAllGigs();
-    res.status(200).json({ users });
+    const gigs = await getAllGigs();
+    res.status(200).json({ gigs });
   }
 );
 
 //Create new User
 export const createGigHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const user = await createGig(req.body);
-    res.status(201).json(user);
+    const gig = await createGig(req.body);
+    res.status(201).json(gig);
   }
 );
 
 //Get single User
 export const getGigHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const user = await getGig(req.params.id);
-    res.status(200).json(user);
+    const gig = await getGig(req.params.id);
+    res.status(200).json(gig);
   }
 );
 
 //Update User
 export const updateGigHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const user = await updateGig(req.params.id, req.body);
-    res.status(200).json(user);
+    const gig = await updateGig(req.params.id, req.body);
+    res.status(200).json(gig);
   }
 );
 
