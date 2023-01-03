@@ -7,6 +7,10 @@ export interface IGigSchema extends GigType {
 
 const gigSchema = new Schema<GigType>(
     {
+        userId: {
+            type: String,
+            required: true,
+        },
         title: {
             type: String,
             required: true,

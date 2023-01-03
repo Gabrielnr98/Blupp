@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import asyncHandler = require('express-async-handler');
+import { AuthorizedUserRequest } from '../models/authMiddleware';
 import {
     getAllGigs,
     createGig,
@@ -18,8 +19,8 @@ export const getAllGigsHandler = asyncHandler(
 
 // Create new Gig
 export const createGigHandler = asyncHandler(
-    async (req: Request, res: Response) => {
-        const gig = await createGig(req.body);
+    async (req: AuthorizedUserRequest, res: Response) => {
+        const gig = await createGig(req.body, req.user?._id);
         res.status(201).json(gig);
     }
 );
@@ -34,16 +35,16 @@ export const getGigHandler = asyncHandler(
 
 // Update Gig
 export const updateGigHandler = asyncHandler(
-    async (req: Request, res: Response) => {
-        const gig = await updateGig(req.params.id, req.body);
+    async (req: AuthorizedUserRequest, res: Response) => {
+        const gig = await updateGig(req.params.id, req.body, req.user?._id);
         res.status(200).json(gig);
     }
 );
 
 // Delete Gig
 export const deleteGigHandler = asyncHandler(
-    async (req: Request, res: Response) => {
-        await deleteGig(req.params.id);
+    async (req: AuthorizedUserRequest, res: Response) => {
+        await deleteGig(req.params.id, req.user?._id);
         res.status(200).json({ message: `Deleted ${req.params.id}` });
     }
 );

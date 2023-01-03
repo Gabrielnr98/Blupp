@@ -1,9 +1,10 @@
 import { checkIsValidObjectId } from '../database/db';
 import GigModel from '../models/gigModel';
 import { sanitizeGig } from '../sanitizers/gigSanitizer';
+import { sanitizeId } from '../sanitizers/userSanitizer';
 import { IGigSchema } from '../schema/gigSchema';
 import { GigType } from '../types/gigTypes';
-import { ErrorHandler } from '../utils/httpException';
+import HttpException, { ErrorHandler } from '../utils/httpException';
 
 export async function getAllGigs(): Promise<GigType[]> {
     try {
@@ -14,12 +15,15 @@ export async function getAllGigs(): Promise<GigType[]> {
     }
 }
 
-export async function createGig(gig: GigType): Promise<GigType> {
-    const sanitizedGig = sanitizeGig(gig);
+export async function createGig(
+    gig: GigType,
+    userId: string | undefined
+): Promise<GigType> {
+    const sanitizedGig = sanitizeGig(gig, userId);
     try {
         const newGig = await GigModel.create(sanitizedGig);
         return newGig;
-    } catch (err) {
+    } catch (err: unknown) {
         throw ErrorHandler(err);
     }
 }
@@ -37,13 +41,24 @@ export async function getGig(id: string): Promise<IGigSchema> {
     }
 }
 
-export async function updateGig(id: string, gig: GigType): Promise<IGigSchema> {
-    checkIsValidObjectId(id);
-    const sanitizedGig = sanitizeGig(gig);
+export async function updateGig(
+    gigId: string,
+    gig: GigType,
+    userId: string | undefined
+): Promise<IGigSchema> {
+    checkIsValidObjectId(gigId);
+
+    await isUserAuthorized(userId, gigId);
+
+    const sanitizedGig = sanitizeGig(gig, userId);
     try {
-        const updatedGig = await GigModel.findByIdAndUpdate(id, sanitizedGig, {
-            new: true,
-        });
+        const updatedGig = await GigModel.findByIdAndUpdate(
+            gigId,
+            sanitizedGig,
+            {
+                new: true,
+            }
+        );
         if (updatedGig == null) {
             throw new Error('Gig not found');
         }
@@ -53,14 +68,33 @@ export async function updateGig(id: string, gig: GigType): Promise<IGigSchema> {
     }
 }
 
-export async function deleteGig(id: string): Promise<void> {
-    checkIsValidObjectId(id);
+export async function deleteGig(
+    gigId: string,
+    userId: string | undefined
+): Promise<void> {
+    checkIsValidObjectId(gigId);
+    await isUserAuthorized(userId, gigId);
     try {
-        const gig = await GigModel.findByIdAndDelete(id);
+        const gig = await GigModel.findByIdAndDelete(gigId);
         if (gig == null) {
             throw new Error('Gig not found');
         }
     } catch (err) {
         throw ErrorHandler(err);
+    }
+}
+
+async function isUserAuthorized(
+    userId: string | undefined,
+    gigId: string
+): Promise<void> {
+    const sanitizedUserId = sanitizeId(userId);
+    const gigToUpdate = await getGig(gigId);
+
+    if (sanitizedUserId !== gigToUpdate._id) {
+        throw new HttpException(
+            'You are not authorized to perform this action',
+            401
+        );
     }
 }

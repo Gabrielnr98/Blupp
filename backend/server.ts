@@ -25,4 +25,6 @@ app.use('/api/user', userRoutes);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
+app.listen(PORT, () =>
+    console.log(`App listening on port ${PORT}`.green.underline.bold)
+);

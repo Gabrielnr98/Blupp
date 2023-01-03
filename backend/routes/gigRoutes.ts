@@ -7,13 +7,14 @@ import {
     updateGigHandler,
     deleteGigHandler,
 } from '../controllers/gigController';
+import { protect } from '../models/authMiddleware';
 const gigRoutes = express.Router();
 
-gigRoutes.route('/').get(getAllGigsHandler).post(createGigHandler);
+gigRoutes.route('/').get(getAllGigsHandler).post(protect, createGigHandler);
 gigRoutes
     .route('/:id')
     .get(getGigHandler)
-    .put(updateGigHandler)
-    .delete(deleteGigHandler);
+    .put(protect, updateGigHandler)
+    .delete(protect, deleteGigHandler);
 
 export default gigRoutes;

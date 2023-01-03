@@ -1,8 +1,11 @@
 import { GigType } from '../types/gigTypes';
 import HttpException from '../utils/httpException';
+import { sanitizeId } from './userSanitizer';
 
-export function sanitizeGig(gig: GigType): GigType {
+export function sanitizeGig(gig: GigType, userId: string | undefined): GigType {
+    const sanitizedId = sanitizeId(userId);
     const sanitizedGig: GigType = {
+        userId: sanitizedId,
         title: '',
     };
 
