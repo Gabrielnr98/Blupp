@@ -1,18 +1,19 @@
-import * as express from "express";
-const router = express.Router();
+import * as express from 'express';
+
 import {
-  getAllGigsHandler,
-  createGigHandler,
-  getGigHandler,
-  updateGigHandler,
-  deleteGigHandler,
-} from "../controllers/gigController";
+    getAllGigsHandler,
+    createGigHandler,
+    getGigHandler,
+    updateGigHandler,
+    deleteGigHandler,
+} from '../controllers/gigController';
+const gigRoutes = express.Router();
 
-router.route("/").get(getAllGigsHandler).post(createGigHandler);
-router
-  .route("/:id")
-  .get(getGigHandler)
-  .put(updateGigHandler)
-  .delete(deleteGigHandler);
+gigRoutes.route('/').get(getAllGigsHandler).post(createGigHandler);
+gigRoutes
+    .route('/:id')
+    .get(getGigHandler)
+    .put(updateGigHandler)
+    .delete(deleteGigHandler);
 
-module.exports = router;
+export default gigRoutes;

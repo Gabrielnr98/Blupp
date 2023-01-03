@@ -1,71 +1,66 @@
-import { checkIsValidObjectId } from "../database/db";
-import GigModel from "../models/gigModel";
-import { sanitizeGig } from "../sanitizers/gigSanitizer";
-import { IGigSchema } from "../schema/gigSchema";
-import { GigType } from "../types/gigTypes";
+import { checkIsValidObjectId } from '../database/db';
+import GigModel from '../models/gigModel';
+import { sanitizeGig } from '../sanitizers/gigSanitizer';
+import { IGigSchema } from '../schema/gigSchema';
+import { GigType } from '../types/gigTypes';
+import { ErrorHandler } from '../utils/httpException';
 
 export async function getAllGigs(): Promise<GigType[]> {
-  try {
-    const gigs = await GigModel.find();
-    if (!gigs) {
-      throw new Error("No Gigs :(");
+    try {
+        const gigs = await GigModel.find();
+        return gigs;
+    } catch (err: unknown) {
+        throw ErrorHandler(err);
     }
-    return gigs;
-  } catch (err) {
-    throw new Error("Catch: Gigs not found");
-  }
 }
 
 export async function createGig(gig: GigType): Promise<GigType> {
-  sanitizeGig(gig);
-  try {
-    const newGig = await GigModel.create(gig);
-    if (!newGig) {
-      throw new Error("Error creating gig");
+    const sanitizedGig = sanitizeGig(gig);
+    try {
+        const newGig = await GigModel.create(sanitizedGig);
+        return newGig;
+    } catch (err) {
+        throw ErrorHandler(err);
     }
-    return newGig;
-  } catch (err) {
-    throw new Error("Catch: Error creating gig");
-  }
 }
 
 export async function getGig(id: string): Promise<IGigSchema> {
-  checkIsValidObjectId(id);
-  try {
-    const gig = await GigModel.findById(id);
-    if (!gig) {
-      throw new Error("Gig not found");
+    checkIsValidObjectId(id);
+    try {
+        const gig = await GigModel.findById(id);
+        if (gig == null) {
+            throw new Error('Gig not found');
+        }
+        return gig;
+    } catch (err) {
+        throw ErrorHandler(err);
     }
-    return gig;
-  } catch (err) {
-    throw new Error("Catch: Gig not found");
-  }
 }
 
 export async function updateGig(id: string, gig: GigType): Promise<IGigSchema> {
-  checkIsValidObjectId(id);
-  sanitizeGig(gig);
-  try {
-    const updatedGig = await GigModel.findByIdAndUpdate(id, gig, {
-      new: true,
-    });
-    if (!updatedGig) {
-      throw new Error("Gig not found");
+    checkIsValidObjectId(id);
+    const sanitizedGig = sanitizeGig(gig);
+    try {
+        const updatedGig = await GigModel.findByIdAndUpdate(id, sanitizedGig, {
+            new: true,
+        });
+        if (updatedGig == null) {
+            throw new Error('Gig not found');
+        }
+        return updatedGig;
+    } catch (err) {
+        throw ErrorHandler(err);
     }
-    return updatedGig;
-  } catch (err) {
-    throw new Error("Catch: Gig not found");
-  }
 }
 
 export async function deleteGig(id: string): Promise<void> {
-  checkIsValidObjectId(id);
-  try {
-    const gig = await GigModel.findByIdAndDelete(id);
-    if (!gig) {
-      throw new Error("Gig not found");
+    checkIsValidObjectId(id);
+    try {
+        const gig = await GigModel.findByIdAndDelete(id);
+        if (gig == null) {
+            throw new Error('Gig not found');
+        }
+    } catch (err) {
+        throw ErrorHandler(err);
     }
-  } catch (err) {
-    throw new Error("Catch: Gig not found");
-  }
 }
