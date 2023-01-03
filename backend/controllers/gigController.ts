@@ -8,7 +8,7 @@ import {
   deleteGig,
 } from "../services/gigServices";
 
-//Get all Users
+//Get all Gigs
 export const getAllGigsHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const gigs = await getAllGigs();
@@ -16,7 +16,7 @@ export const getAllGigsHandler = expressAsyncHandler(
   }
 );
 
-//Create new User
+//Create new Gig
 export const createGigHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const gig = await createGig(req.body);
@@ -24,7 +24,7 @@ export const createGigHandler = expressAsyncHandler(
   }
 );
 
-//Get single User
+//Get single Gig
 export const getGigHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const gig = await getGig(req.params.id);
@@ -32,7 +32,7 @@ export const getGigHandler = expressAsyncHandler(
   }
 );
 
-//Update User
+//Update Gig
 export const updateGigHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const gig = await updateGig(req.params.id, req.body);
@@ -40,7 +40,7 @@ export const updateGigHandler = expressAsyncHandler(
   }
 );
 
-//Delete User
+//Delete Gig
 export const deleteGigHandler = expressAsyncHandler(
   async (req: Request, res: Response) => {
     await deleteGig(req.params.id);

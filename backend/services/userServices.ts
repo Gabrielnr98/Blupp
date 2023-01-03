@@ -1,71 +1,74 @@
 import { checkValidId } from "../database/db";
-import GigModel from "../models/gigModel";
-import { sanitizeGig } from "../sanitizers/gigSanitizer";
-import { IGigSchema } from "../schema/gigSchema";
-import { GigType } from "../types/gigTypes";
+import UserModel from "../models/userModel";
+import { sanitizeUser } from "../sanitizers/userSanitizer";
+import { IUserSchema } from "../schema/userSchema";
+import { UserType } from "../types/userTypes";
 
-export async function getAllGigs(): Promise<GigType[]> {
+export async function getAllUsers(): Promise<UserType[]> {
   try {
-    const gigs = await GigModel.find();
-    if (!gigs) {
-      throw new Error("No Gigs :(");
+    const users = await UserModel.find();
+    if (!users) {
+      throw new Error("No Users :(");
     }
-    return gigs;
+    return users;
   } catch (err) {
-    throw new Error("Catch: Gigs not found");
+    throw new Error(`Error Getting Users: ${err.message}`);
   }
 }
 
-export async function createGig(gig: GigType): Promise<GigType> {
-  sanitizeGig(gig);
+export async function createUser(user: UserType): Promise<UserType> {
+  sanitizeUser(user);
   try {
-    const newGig = await GigModel.create(gig);
-    if (!newGig) {
-      throw new Error("Error creating gig");
+    const newUser = await UserModel.create(user);
+    if (!newUser) {
+      throw new Error("Error creating user");
     }
-    return newGig;
+    return newUser;
   } catch (err) {
-    throw new Error("Catch: Error creating gig");
+    throw new Error(`Error creating user: ${err.message}`);
   }
 }
 
-export async function getGig(id: string): Promise<IGigSchema> {
+export async function getUser(id: string): Promise<IUserSchema> {
   checkValidId(id);
   try {
-    const gig = await GigModel.findById(id);
-    if (!gig) {
-      throw new Error("Gig not found");
+    const user = await UserModel.findById(id);
+    if (!user) {
+      throw new Error("User not found");
     }
-    return gig;
+    return user;
   } catch (err) {
-    throw new Error("Catch: Gig not found");
+    throw new Error(`Catch: ${err.message}`);
   }
 }
 
-export async function updateGig(id: string, gig: GigType): Promise<IGigSchema> {
+export async function updateUser(
+  id: string,
+  user: UserType
+): Promise<IUserSchema> {
   checkValidId(id);
-  sanitizeGig(gig);
+  sanitizeUser(user);
   try {
-    const updatedGig = await GigModel.findByIdAndUpdate(id, gig, {
+    const updatedUser = await UserModel.findByIdAndUpdate(id, user, {
       new: true,
     });
-    if (!updatedGig) {
-      throw new Error("Gig not found");
+    if (!updatedUser) {
+      throw new Error("User not found");
     }
-    return updatedGig;
+    return updatedUser;
   } catch (err) {
-    throw new Error("Catch: Gig not found");
+    throw new Error(`Catch: ${err.message}`);
   }
 }
 
-export async function deleteGig(id: string): Promise<void> {
+export async function deleteUser(id: string): Promise<void> {
   checkValidId(id);
   try {
-    const gig = await GigModel.findByIdAndDelete(id);
-    if (!gig) {
-      throw new Error("Gig not found");
+    const user = await UserModel.findByIdAndDelete(id);
+    if (!user) {
+      throw new Error("User not found");
     }
   } catch (err) {
-    throw new Error("Catch: Gig not found");
+    throw new Error(`Catch: ${err.message}`);
   }
 }
