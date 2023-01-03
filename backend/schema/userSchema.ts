@@ -9,34 +9,35 @@ export interface IUserSchema extends UserType {
 
 const userSchema = new Schema<UserType>(
   {
-    name: {
+    username: {
       type: String,
-      required: [true, "Name is required"],
-    },
-    surname: {
-      type: String,
-      required: [true, "Surname is required"],
+      required: [true, "Username is required"],
+      unique: true,
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
       unique: true,
       min: [6, "Email must be at least 6 characters"],
-      max: [50, "Email must be less than 50 characters"],
+      max: [50, "Email must be less then 50 characters"],
       match: [emailRegex, "Please add a valid email"],
     },
     password: {
       type: String,
-      required: true,
+      required: [true, "Password is required"],
+      min: [6, "Password must be at least 6 characters"],
+      max: [50, "Password must be less then 50 characters"],
     },
     isAdmin: {
       type: Boolean,
       default: false,
     },
-    resetPasswordToken: String,
-    resetPasswordExpires: Date,
+    resetPasswordToken: String, // token to reset password
+    resetPasswordExpires: Date, // expire date of token
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export default userSchema;

@@ -1,6 +1,5 @@
 export interface UserType {
-  name: string;
-  surname: string;
+  username: string;
   email: string;
   password: string;
   isAdmin: boolean;
@@ -10,8 +9,7 @@ export interface UserType {
 
 export interface UserReturnType {
   _id: string;
-  name: string;
-  surname: string;
+  username: string;
   email: string;
   isAdmin: boolean;
   token: string;

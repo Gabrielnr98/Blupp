@@ -1,18 +1,22 @@
 import express from "express";
+import { protect } from "../models/authMiddleware";
 const router = express.Router();
-import {
-  getAllUsersHandler,
+
+const {
+  getUsersHandler,
   createUserHandler,
   getUserHandler,
-  updateUserHandler,
   deleteUserHandler,
-} from "../controllers/userController";
+  updateUserHandler,
+  loginUserHandler,
+} = require("../controllers/userController");
 
-router.route("/").get(getAllUsersHandler).post(createUserHandler);
+router.route("/").get(protect, getUsersHandler).post(createUserHandler);
+router.route("/login").post(loginUserHandler);
 router
   .route("/:id")
   .get(getUserHandler)
-  .put(updateUserHandler)
-  .delete(deleteUserHandler);
+  .put(protect, updateUserHandler)
+  .delete(protect, deleteUserHandler);
 
 module.exports = router;

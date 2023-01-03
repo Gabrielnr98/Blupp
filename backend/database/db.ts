@@ -17,7 +17,7 @@ export const connectDB = async () => {
   }
 };
 
-export function checkValidId(id: string) {
+export function checkIsValidObjectId(id: string) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new HttpException("Invalid ID", 400);
   }

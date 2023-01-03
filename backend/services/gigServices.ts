@@ -1,4 +1,4 @@
-import { checkValidId } from "../database/db";
+import { checkIsValidObjectId } from "../database/db";
 import GigModel from "../models/gigModel";
 import { sanitizeGig } from "../sanitizers/gigSanitizer";
 import { IGigSchema } from "../schema/gigSchema";
@@ -30,7 +30,7 @@ export async function createGig(gig: GigType): Promise<GigType> {
 }
 
 export async function getGig(id: string): Promise<IGigSchema> {
-  checkValidId(id);
+  checkIsValidObjectId(id);
   try {
     const gig = await GigModel.findById(id);
     if (!gig) {
@@ -43,7 +43,7 @@ export async function getGig(id: string): Promise<IGigSchema> {
 }
 
 export async function updateGig(id: string, gig: GigType): Promise<IGigSchema> {
-  checkValidId(id);
+  checkIsValidObjectId(id);
   sanitizeGig(gig);
   try {
     const updatedGig = await GigModel.findByIdAndUpdate(id, gig, {
@@ -59,7 +59,7 @@ export async function updateGig(id: string, gig: GigType): Promise<IGigSchema> {
 }
 
 export async function deleteGig(id: string): Promise<void> {
-  checkValidId(id);
+  checkIsValidObjectId(id);
   try {
     const gig = await GigModel.findByIdAndDelete(id);
     if (!gig) {
