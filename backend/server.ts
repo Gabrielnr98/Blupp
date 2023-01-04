@@ -1,9 +1,10 @@
 import express from 'express';
 import * as Colors from 'colors.ts';
+import cors from 'cors';
 
 import { connectDB } from './database/db';
 import { errorHandler } from './middleware/errorMiddleware';
-import { PORT } from './utils/config';
+import { FRONTEND_URL, PORT } from './utils/config';
 import gigRoutes from './routes/gigRoutes';
 import userRoutes from './routes/userRoutes';
 
@@ -18,7 +19,20 @@ export const db = async (): Promise<void> => {
 void db();
 
 const app = express();
+
+const allowedOrigins = [FRONTEND_URL];
+
+const options: cors.CorsOptions = {
+    origin: allowedOrigins,
+};
+
+app.use(cors(options));
 app.use(express.json());
+
+app.use((req, res, next) => {
+    console.log(req.path, req.method);
+    next();
+});
 
 app.use('/api/gig', gigRoutes);
 app.use('/api/user', userRoutes);

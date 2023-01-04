@@ -37,7 +37,8 @@ export const createUserHandler = asyncHandler(
 // @access Public
 export const loginUserHandler = asyncHandler(
     async (req: Request, res: Response) => {
-        const user = await loginUser(req.body.email, req.body.password);
+        const { email, password } = req.body;
+        const user = await loginUser(email, password);
         res.status(201).json(user);
     }
 );

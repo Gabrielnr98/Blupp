@@ -13,7 +13,7 @@ import {
 export const getAllGigsHandler = asyncHandler(
     async (req: Request, res: Response) => {
         const gigs = await getAllGigs();
-        res.status(200).json({ gigs });
+        res.status(200).json(gigs);
     }
 );
 
