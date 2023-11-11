@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs';
 import { checkIsValidObjectId } from '../database/db';
 import WebsiteModel from '../models/websiteModel';
 import { sanitizeWebsite } from '../sanitizers/websiteSanitizer';
