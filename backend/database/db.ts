@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { DB_URI } from '../utils/config';
 import HttpException from '../utils/httpException';
-
 export const connectDB = async (): Promise<void> => {
     if (DB_URI === '' || DB_URI === null) {
         console.log(
