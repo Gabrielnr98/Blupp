@@ -2,21 +2,19 @@ import express from 'express';
 import { protect } from '../models/authMiddleware';
 
 import {
-    getUsersHandler,
-    createUserHandler,
-    getUserHandler,
-    deleteUserHandler,
-    updateUserHandler,
-    loginUserHandler,
-} from '../controllers/userController';
+    getWebsitesHandler,
+    createWebsiteHandler,
+    getWebsiteHandler,
+    deleteWebsiteHandler,
+    updateWebsiteHandler,
+} from '../controllers/websiteController';
 const websiteRoutes = express.Router();
 
-websiteRoutes.route('/').get(protect, getUsersHandler).post(createUserHandler);
-websiteRoutes.route('/login').post(loginUserHandler);
+websiteRoutes.route('/').get(protect, getWebsitesHandler).post(createWebsiteHandler);
 websiteRoutes
     .route('/:id')
-    .get(getUserHandler)
-    .put(protect, updateUserHandler)
-    .delete(protect, deleteUserHandler);
+    .get(getWebsiteHandler)
+    .put(protect, updateWebsiteHandler)
+    .delete(protect, deleteWebsiteHandler);
 
 export default websiteRoutes;
