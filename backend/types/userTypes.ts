@@ -1,8 +1,11 @@
+import { Schema } from 'mongoose';
+
 export interface UserType {
     username: string;
     email: string;
     password: string;
     isAdmin: boolean;
+    websites: Schema.Types.ObjectId[];
     resetPasswordToken: string;
     resetPasswordExpires: Date;
 }

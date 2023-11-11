@@ -5,8 +5,8 @@ import cors from 'cors';
 import { connectDB } from './database/db';
 import { errorHandler } from './middleware/errorMiddleware';
 import { FRONTEND_URL, PORT } from './utils/config';
-import gigRoutes from './routes/gigRoutes';
 import userRoutes from './routes/userRoutes';
+import websiteRoutes from './routes/websiteRoutes';
 
 // Apply Colors to consoleLogs
 Colors.colors('', '');
@@ -34,7 +34,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/api/gig', gigRoutes);
+app.use('/api/website', websiteRoutes);
 app.use('/api/user', userRoutes);
 
 app.use(errorHandler);

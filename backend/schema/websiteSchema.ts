@@ -23,6 +23,19 @@ const websiteSchema = new Schema<WebsiteType>(
             max: [50, 'Email must be less then 50 characters'],
             match: [emailRegex, 'Please add a valid email'],
         },
+        members: [
+            {
+                user: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Website',
+                },
+                role: {
+                    type: String,
+                    enum: ['admin', 'editor', 'viewer'],
+                    default: 'viewer',
+                },
+            },
+        ],
     },
     {
         timestamps: true,

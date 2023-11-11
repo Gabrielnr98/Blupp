@@ -33,6 +33,12 @@ const userSchema = new Schema<UserType>(
             type: Boolean,
             default: false,
         },
+        websites: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Website',
+            },
+        ],
         resetPasswordToken: String, // token to reset password
         resetPasswordExpires: Date, // expire date of token
     },

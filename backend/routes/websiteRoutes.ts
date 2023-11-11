@@ -1,4 +1,5 @@
 import express from 'express';
+import { authorizeWebsite } from '../models/websiteMiddleware';
 import { protect } from '../models/authMiddleware';
 
 import {
@@ -10,11 +11,18 @@ import {
 } from '../controllers/websiteController';
 const websiteRoutes = express.Router();
 
-websiteRoutes.route('/').get(protect, getWebsitesHandler).post(createWebsiteHandler);
+websiteRoutes
+    .route('/')
+    .get(protect, getWebsitesHandler)
+    .post(protect, createWebsiteHandler);
 websiteRoutes
     .route('/:id')
-    .get(getWebsiteHandler)
-    .put(protect, updateWebsiteHandler)
-    .delete(protect, deleteWebsiteHandler);
+    .get(protect, authorizeWebsite({ action: 'view' }), getWebsiteHandler)
+    .put(protect, authorizeWebsite({ action: 'update' }), updateWebsiteHandler)
+    .delete(
+        protect,
+        authorizeWebsite({ action: 'delete' }),
+        deleteWebsiteHandler
+    );
 
 export default websiteRoutes;
