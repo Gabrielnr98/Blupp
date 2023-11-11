@@ -5,7 +5,6 @@ import { sanitizeWebsite } from '../sanitizers/websiteSanitizer';
 import { IWebsiteSchema } from '../schema/websiteSchema';
 import { WebsiteReturnType, WebsiteType } from '../types/websiteTypes';
 import HttpException, { ErrorHandler } from '../utils/httpException';
-import { generateToken } from './tokenService';
 
 export async function getWebsites(): Promise<WebsiteType[]> {
     try {
@@ -17,7 +16,9 @@ export async function getWebsites(): Promise<WebsiteType[]> {
     }
 }
 
-export async function createWebsite(Website: WebsiteType): Promise<WebsiteReturnType> {
+export async function createWebsite(
+    Website: WebsiteType
+): Promise<WebsiteReturnType> {
     const sanitizedWebsite = await sanitizeWebsite(Website);
 
     try {
@@ -30,13 +31,15 @@ export async function createWebsite(Website: WebsiteType): Promise<WebsiteReturn
             _id: newWebsite._id,
             name: newWebsite.name,
             email: newWebsite.email,
-        }
+        };
     } catch (err) {
         throw ErrorHandler(err);
     }
 }
 
-export async function getWebsiteById(websiteId: string): Promise<IWebsiteSchema> {
+export async function getWebsiteById(
+    websiteId: string
+): Promise<IWebsiteSchema> {
     checkIsValidObjectId(websiteId);
     try {
         const Website = await WebsiteModel.findById(websiteId);
@@ -62,7 +65,8 @@ export async function updateWebsite(
             sanitizedWebsite,
             { new: true }
         );
-        if (updatedWebsite == null) throw new HttpException('Website not found', 404);
+        if (updatedWebsite == null)
+            throw new HttpException('Website not found', 404);
 
         return updatedWebsite;
     } catch (err) {
